@@ -1,20 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import {NavigationContainer} from "@react-navigation/native";
+import {createNativeStackNavigator} from "@react-navigation/native-stack";
 
-export default function App() {
+import {ProvideContext} from "./components/context/coinsContext";
+import HeaderLogo from "./components/HeaderLogo";
+import Main from "./components/Main";
+import Search from "./components/Search";
+import LogIn from "./components/LogIn";
+import {theme} from "./theme";
+import CoinDetails from "./components/CoinDetails";
+
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+  const headerOptions = {
+    headerStyle: {
+      backgroundColor: theme.colors.primary,
+    },
+    headerTintColor: theme.colors.neutral.white,
+  };
+
+  const homeScreenOptions = {
+    headerTitle: (props) => <HeaderLogo {...props} />,
+  };
+
+  const searchScreenOptions = {
+    title: "Search Coins",
+  };
+
+  const logInScreenOptions = {
+    title: "Log In",
+    headerShown: false,
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ProvideContext>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home" screenOptions={headerOptions}>
+          <Stack.Screen component={Main} name={"Home"} options={homeScreenOptions} />
+          <Stack.Screen component={Search} name={"Search"} options={searchScreenOptions} />
+          <Stack.Screen component={LogIn} name={"LogIn"} options={logInScreenOptions} />
+          <Stack.Screen component={CoinDetails} name={"CoinDetails"} options={homeScreenOptions} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ProvideContext>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
